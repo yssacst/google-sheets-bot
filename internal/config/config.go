@@ -19,7 +19,6 @@ type Config struct {
 func Load() (*Config, error) {
 
 	cfg := &Config{
-		GoogleCredentials: os.Getenv("GOOGLE_CREDENTIALS"),
 		SpreadsheetID:     os.Getenv("SPREADSHEET_ID"),
 		SheetName:         os.Getenv("SHEET_NAME"),
 
@@ -37,11 +36,6 @@ func Load() (*Config, error) {
 }
 
 func (c *Config) validate() error {
-
-	if c.GoogleCredentials == "" {
-		return fmt.Errorf("GOOGLE_CREDENTIALS not found")
-	}
-
 	if c.SpreadsheetID == "" {
 		return fmt.Errorf("SPREADSHEET_ID not found")
 	}
