@@ -2,6 +2,8 @@
 
 A lightweight Go bot that reads a Google Sheets spreadsheet every day, checks whether a user is scheduled for the next day, and sends a notification through a configurable notification provider.
 
+![image](./docs/img/ntfy_pop_up_ios.jpeg)
+
 The project was designed to be simple, maintainable and extensible, following a lightweight Hexagonal Architecture (Ports & Adapters).
 
 ## Features
