@@ -2,7 +2,10 @@ module github.com/yssacst/google-sheets-bot
 
 go 1.25.8
 
-require google.golang.org/api v0.286.0
+require (
+	github.com/joho/godotenv v1.5.1
+	google.golang.org/api v0.286.0
+)
 
 require (
 	cloud.google.com/go/auth v0.20.0 // indirect
@@ -16,7 +19,6 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.16 // indirect
 	github.com/googleapis/gax-go/v2 v2.22.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.67.0 // indirect
 	go.opentelemetry.io/otel v1.43.0 // indirect
