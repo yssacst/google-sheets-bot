@@ -3,9 +3,11 @@ name: Google Sheets Duty Bot
 on:
   workflow_dispatch:
 
-  # Execução diária às 19h (Brasília)
   schedule:
-    - cron: "30 22 * * *"
+    - cron: "40 22 * * *"
+
+permissions:
+  contents: read
 
 jobs:
   run-bot:
@@ -18,48 +20,36 @@ jobs:
       SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
       SHEET_NAME: ${{ secrets.SHEET_NAME }}
       USER_NAME: ${{ secrets.USER_NAME }}
-
       API_URL: ${{ secrets.API_URL }}
       API_TOKEN: ${{ secrets.API_TOKEN }}
-
       APP_ENV: prod
       LOG_LEVEL: info
 
     steps:
-      # 1. Checkout do código
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. Setup do Go
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.24"
-          cache: true
+          cache-dependency-path: go.sum
 
-      # 3. Baixar dependências
-      - name: Download dependencies
-        run: go mod download
+      - name: Cache Go build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
-      - name: Write credentials file
-        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > /tmp/credentials.json
-
-      - name: Define Version
-        id: version
-        shell: bash
+      - name: Write credentials
         run: |
-          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
-            echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          else
-            echo "VERSION=dev-${GITHUB_SHA::7}" >> $GITHUB_ENV
-          fi
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > /tmp/credentials.json
 
       - name: Build
         run: |
-          go build \
-          -ldflags="-X 'main.Version=${VERSION}'" \
-          -o bot \
-          ./cmd/bot
+          go build -trimpath -ldflags="-s -w -X main.Version=${GITHUB_SHA::7}" -o bot ./cmd/bot
 
-      - name: Execute
+      - name: Run bot
         run: ./bot
