@@ -51,7 +51,7 @@ func (c *Client) GetRows(ctx context.Context) ([]core.Row, error) {
 	}
 
 	// assumindo formato:
-	// Nome | Data
+	// Dia da Semana | Início do plantão | Fim do plantão | Horas de plantão | Feriado | Sistemas de Loja | Hydra
 	for i, r := range resp.Values {
 
 		// pula header
@@ -60,14 +60,14 @@ func (c *Client) GetRows(ctx context.Context) ([]core.Row, error) {
 		}
 
 		row := core.Row{}
-
-		if len(r) > 0 {
-			row.Name = fmt.Sprintf("%v", r[0])
-		}
-
+		
 		if len(r) > 1 {
 			parsedDate, _ := parseSheetDate(r[1])
 			row.Date = parsedDate
+		}
+		
+		if len(r) > 6 {
+			row.Name = fmt.Sprintf("%v", r[6])
 		}
 
 		rows = append(rows, core.Row{
@@ -84,13 +84,13 @@ func parseSheetDate(v any) (time.Time, error) {
 	switch value := v.(type) {
 
 	case string:
-		// ISO
-		t, err := time.Parse("2006-01-02", value)
+		// BR
+		t, err := time.Parse("02/01/2006 15:04:05", value)
 		if err == nil {
 			return t, nil
 		}
-		// BR
-		return time.Parse("02/01/2006", value)
+		// ISO
+		return time.Parse("2006-01-02", value)
 	case float64:
 		// Google Sheets serial date
 		return timeFromExcelSerial(value), nil
