@@ -72,7 +72,6 @@ GOOGLE_APPLICATION_CREDENTIALS=credentials.json
 GOOGLE_CREDENTIALS=<conteúdo do JSON>
 SPREADSHEET_ID=xxxx
 SHEET_NAME=Sheet1
-USER_NAME=seu_nome
 
 - Opção B (recomendado GitHub Actions)
 Criar secret:

@@ -4,15 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
-	
+
 	"github.com/yssacst/google-sheets-bot/internal/config"
 	"github.com/yssacst/google-sheets-bot/internal/core"
 	"github.com/yssacst/google-sheets-bot/internal/logger"
 	"github.com/yssacst/google-sheets-bot/internal/notifier"
 	"github.com/yssacst/google-sheets-bot/internal/sheets"
 	"github.com/yssacst/google-sheets-bot/internal/version"
-	
+
 	"github.com/joho/godotenv"
 )
 
@@ -41,7 +40,7 @@ func main() {
 	apiClient := notifier.NewClient(cfg)
 
 	// Run flow
-	err = run(ctx, cfg, sheetClient, apiClient, lg)
+	err = run(ctx, sheetClient, apiClient, lg)
 	if err != nil {
 		lg.Error(fmt.Sprintf("bot execution failed: %v", err))
 		log.Fatal(err)
@@ -52,33 +51,24 @@ func main() {
 
 func run(
 	ctx context.Context,
-	cfg *config.Config,
 	sheetClient *sheets.Client,
 	apiClient *notifier.Client,
 	lg *logger.Logger,
 ) error {
-
 	rows, err := sheetClient.GetRows(ctx)
 	if err != nil {
 		return err
 	}
 
-	loc, _ := time.LoadLocation("America/Sao_Paulo")
-	today := time.Now().In(loc)
+	name := core.WhoIsOnDutyTomorrow(rows)
 
-	isOnDuty := core.IsOnDutyTomorrow(rows, cfg.UserName, today)
-
-	if !isOnDuty {
-		lg.Info(fmt.Sprintf("user %v is NOT on duty tomorrow", cfg.UserName))
-		return nil
+	if name != "" {
+		lg.Info(fmt.Sprintf("user %v IS on duty tomorrow → sending notification", name))
 	}
 
-	lg.Info(fmt.Sprintf("user %v IS on duty tomorrow → sending notification", cfg.UserName))
+	payload := notifier.BuildPayload(name)
 
-	payload := notifier.BuildPayload(cfg.UserName)
-
-	err = apiClient.Send(ctx, payload)
-
+	err = apiClient.Send(ctx, payload, name)
 	if err != nil {
 		return err
 	}

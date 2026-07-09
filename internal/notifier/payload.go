@@ -9,21 +9,25 @@ const (
 )
 
 type Payload struct {
-	Title 		string   `json:"Title"`
-	Priority 	int      `json:"Priority"`
-	Message     string   `json:"message"`
-	Tags        []string `json:"Tags"`
+	Title    string   `json:"Title"`
+	Priority int      `json:"Priority"`
+	Message  string   `json:"message"`
+	Tags     []string `json:"Tags"`
 }
 
-func BuildPayload(user string) Payload {
-	tag  := []string{"rotating_light"}
-	title  := "PLANTÃO HYDRA"
-	message:= user+", você está de sobreaviso amanhã!"
+func BuildPayload(name string) Payload {
+	tag := []string{"rotating_light"}
+	title := "PLANTÃO HYDRA"
+	message := "Não há ninguém escalado para amanhã. Atualizar planilha!"
+
+	if name != "" {
+		message = name + ", amanhã é o seu sobreaviso."
+	}
 
 	return Payload{
-		Title: title,
+		Title:    title,
 		Priority: PRIORITY_MAX,
-		Message: message,
-		Tags: tag,
+		Message:  message,
+		Tags:     tag,
 	}
 }

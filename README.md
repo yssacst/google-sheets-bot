@@ -108,9 +108,6 @@ LOG_LEVEL=INFO
 
 SPREADSHEET_ID=
 SHEET_NAME=
-
-USER_NAME=
-
 API_URL=
 
 GOOGLE_CREDENTIALS=
@@ -245,6 +242,7 @@ Versions are injected during build using Go ldflags.
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Docker support
+- [ ] Handler same name topic
 
 ---
 

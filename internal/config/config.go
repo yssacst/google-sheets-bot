@@ -9,23 +9,15 @@ type Config struct {
 	GoogleCredentials string
 	SpreadsheetID     string
 	SheetName         string
-
-	APIURL   string
-	APIToken string
-
-	UserName string
+	APIURL            string
 }
 
 func Load() (*Config, error) {
 
 	cfg := &Config{
-		SpreadsheetID:     os.Getenv("SPREADSHEET_ID"),
-		SheetName:         os.Getenv("SHEET_NAME"),
-
-		APIURL:   os.Getenv("API_URL"),
-		APIToken: os.Getenv("API_TOKEN"),
-
-		UserName: os.Getenv("USER_NAME"),
+		SpreadsheetID: os.Getenv("SPREADSHEET_ID"),
+		SheetName:     os.Getenv("SHEET_NAME"),
+		APIURL:        os.Getenv("API_URL"),
 	}
 
 	if err := cfg.validate(); err != nil {
@@ -42,10 +34,6 @@ func (c *Config) validate() error {
 
 	if c.APIURL == "" {
 		return fmt.Errorf("API_URL not found")
-	}
-
-	if c.UserName == "" {
-		return fmt.Errorf("USER_NAME not found")
 	}
 
 	return nil

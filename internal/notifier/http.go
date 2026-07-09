@@ -11,26 +11,25 @@ import (
 )
 
 type Client struct {
-	apiURL   string
-	apiToken string
-	http     *http.Client
+	apiURL string
+	http   *http.Client
 }
 
 func NewClient(cfg *config.Config) *Client {
 	return &Client{
-		apiURL:   cfg.APIURL,
-		apiToken: cfg.APIToken,
+		apiURL: cfg.APIURL,
 		http: &http.Client{
 			Timeout: 30 * time.Second,
 		},
 	}
 }
 
-func (c *Client) Send(ctx context.Context, payload Payload) error {
+func (c *Client) Send(ctx context.Context, payload Payload, name string) error {
+	url := buildUrl(c.apiURL, name)
 	req, err := http.NewRequestWithContext(
 		ctx,
 		http.MethodPost,
-		c.apiURL,
+		url,
 		strings.NewReader(payload.Message),
 	)
 	if err != nil {
@@ -63,4 +62,11 @@ func (c *Client) Send(ctx context.Context, payload Payload) error {
 	}
 
 	return nil
+}
+
+func buildUrl(url, name string) string {
+	if name != "" {
+		return url + "-" + name
+	}
+	return url
 }
