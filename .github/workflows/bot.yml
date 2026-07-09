@@ -19,9 +19,7 @@ jobs:
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
       SHEET_NAME: ${{ secrets.SHEET_NAME }}
-      USER_NAME: ${{ secrets.USER_NAME }}
       API_URL: ${{ secrets.API_URL }}
-      API_TOKEN: ${{ secrets.API_TOKEN }}
       APP_ENV: prod
       LOG_LEVEL: info
 
