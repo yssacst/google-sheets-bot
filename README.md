@@ -9,10 +9,10 @@ The project was designed to be simple, maintainable and extensible, following a 
 ## Features
 
 - Read data from Google Sheets
-- Check if a user is on duty for the next day
+- Check if a user is on duty for today or the next day
 - Send notifications through an abstract notification interface
 - Current notification implementation: ntfy.sh
-- Daily execution using GitHub Actions
+- Daily execution using GitHub Actions and Cron-Job.org
 - Configuration through environment variables
 - Structured logging
 - Lightweight architecture with separation of concerns
@@ -24,6 +24,7 @@ The project was designed to be simple, maintainable and extensible, following a 
 ```
                 +----------------+
                 | GitHub Actions |
+                |  cron-job.org  |
                 +--------+-------+
                          |
                          v
@@ -46,10 +47,8 @@ The project was designed to be simple, maintainable and extensible, following a 
 +-------+-------+               +--------+---------+
         |                                |
         v                                v
- Google Sheets API                 ntfy.sh (today)
-                            Telegram (future)
-                            Slack (future)
-                            Discord (future)
+ Google Sheets API                    ntfy.sh
+                            
 ```
 
 The business rules never know **how** the notification is delivered.
@@ -67,7 +66,6 @@ Only the adapter knows that.
 │       └── main.go
 │
 ├── internal/
-│   ├── app/
 │   ├── config/
 │   ├── core/
 │   ├── logger/
