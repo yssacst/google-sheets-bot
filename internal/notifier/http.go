@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/yssacst/google-sheets-bot/internal/config"
+	textutil "github.com/yssacst/google-sheets-bot/internal/textUtil"
 )
 
 type Client struct {
@@ -66,7 +67,14 @@ func (c *Client) Send(ctx context.Context, payload Payload, name string) error {
 
 func buildUrl(url, name string) string {
 	if name != "" {
-		return url + "-" + name
+		topic := handleTopicByName(name)
+		return url + "-" + topic
 	}
 	return url
+}
+
+func handleTopicByName(name string) string {
+	normalized := textutil.NormalizeName(name)
+	topic := strings.ReplaceAll(normalized, " ", "-")
+	return topic
 }
