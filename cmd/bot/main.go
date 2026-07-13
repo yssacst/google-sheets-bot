@@ -60,7 +60,7 @@ func run(
 		return err
 	}
 
-	name := core.WhoIsOnDutyTomorrow(rows)
+	name := core.WhoIsOnDuty(rows)
 
 	if name != "" {
 		lg.Info(fmt.Sprintf("user %v IS on duty tomorrow → sending notification", name))
