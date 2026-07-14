@@ -15,13 +15,13 @@ type Payload struct {
 	Tags     []string `json:"Tags"`
 }
 
-func BuildPayload(name string) Payload {
+func BuildPayload(name, when string) Payload {
 	tag := []string{"rotating_light"}
 	title := "PLANTÃO HYDRA"
 	message := "Não há ninguém escalado para amanhã. Atualizar planilha!"
 
 	if name != "" {
-		message = name + ", amanhã é o seu sobreaviso."
+		message = name + ", " + when + " é o seu sobreaviso."
 	}
 
 	return Payload{

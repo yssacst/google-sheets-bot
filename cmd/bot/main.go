@@ -60,13 +60,13 @@ func run(
 		return err
 	}
 
-	name := core.WhoIsOnDuty(rows)
+	name, when := core.WhoIsOnDuty(rows)
 
 	if name != "" {
 		lg.Info(fmt.Sprintf("user %v IS on duty tomorrow → sending notification", name))
 	}
 
-	payload := notifier.BuildPayload(name)
+	payload := notifier.BuildPayload(name, when)
 
 	err = apiClient.Send(ctx, payload, name)
 	if err != nil {
